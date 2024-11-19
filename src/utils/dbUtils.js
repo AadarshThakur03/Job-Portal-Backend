@@ -1,11 +1,13 @@
 import { pool } from "../config/db.js";
 
 const userTableQuery = `CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) NOT NULL UNIQUE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );`;
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    mobile VARCHAR(15), -- Add mobile field with a suitable length
+    password VARCHAR(255) NOT NULL, -- Add password field; using VARCHAR(255) for hashed passwords
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`;
 
 const postTableQuery = `CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
