@@ -6,6 +6,7 @@ const userTableQuery = `CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE,
     mobile VARCHAR(15), -- Add mobile field with a suitable length
     password VARCHAR(255) NOT NULL, -- Add password field; using VARCHAR(255) for hashed passwords
+    userType ENUM('user','admin') DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
 

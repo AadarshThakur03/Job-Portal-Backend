@@ -14,8 +14,8 @@ export const registerUser = async (user) => {
         }
         
         const hashedPassword = await bcrypt.hash(user.password, 10);
-        const query = `INSERT INTO users (name, email, mobile, password) VALUES (?, ?, ?, ?)`;
-        const values = [user.username, user.email, user.mobile, hashedPassword];
+        const query = `INSERT INTO users (name, email, mobile, password, userType) VALUES (?, ?, ?, ?,?)`;
+        const values = [user.username, user.email, user.mobile, hashedPassword,user.userType];
         await pool.query(query, values);
         return { success: true, message: 'User registered successfully' };
     } catch (error) {
@@ -41,7 +41,7 @@ export const loginUser = async (email, password) => {
         
         // Generate JWT token
         const token = jwt.sign(
-            { id: user.id, email: user.email },
+            { id: user.id, email: user.email, userType:user.userType },
             JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -52,7 +52,7 @@ export const loginUser = async (email, password) => {
             success: true, 
             message: 'Login successful', 
             token, 
-            user: { id: user.id, email: user.email, name: user.name } 
+            user: { id: user.id, email: user.email, userType:user.userType } 
         };
     } catch (error) {
         console.error("Login error:", error);
@@ -71,7 +71,7 @@ export const getUserFromToken = async (token) => {
         console.log("Decoded token:", decoded);
 
         // Retrieve user details from the database
-        const [rows] = await pool.query('SELECT id, name, email, mobile FROM users WHERE id = ?', [decoded.id]);
+        const [rows] = await pool.query('SELECT id, name, email, mobile, userType FROM users WHERE id = ?', [decoded.id]);
 
         if (rows.length === 0) {
             return { success: false, message: 'User not found' };
